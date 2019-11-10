@@ -1,4 +1,4 @@
-(ns person.core
+(ns person.parser
   (:require [clojure.string :as str]
             [java-time :as time]))
 
@@ -39,7 +39,7 @@
   [gender]
   (or (gender? gender)
       (throw (AssertionError. (str "Gender should be one of: "
-                                    (str/join valid-genders ", "))))))
+                                   (doall (str/join ", " valid-genders)))))))
 
 (defn- validate-favorite-color
   [favorite-color]

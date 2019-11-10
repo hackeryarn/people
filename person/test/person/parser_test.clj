@@ -1,9 +1,9 @@
-(ns person.core-test
+(ns person.parser-test
   (:require [clojure.test :refer :all]
             [java-time :as time]
-            [person.core :as p]))
+            [person.parser :as p]))
 
-(deftest str->person
+(deftest valid-str->person
   (def valid-psv "Chernyak|Artem|Male|Green|05/03/1990")
   (def valid-csv "Chernyak,Artem,M,Green,05/03/1990")
   (def valid-ssv "Chernyak Artem M Green 05/03/1990")
@@ -22,8 +22,10 @@
   (testing "comma separated values"
     (is (= valid-person (p/str->person valid-csv))))
   (testing "space separated values"
-    (is (= valid-person (p/str->person valid-ssv))))
+    (is (= valid-person (p/str->person valid-ssv)))))
 
+
+(deftest invalid-str->person
   (def no-separator "ChernyakArtem")
   (testing "missing separators"
     (try
@@ -34,6 +36,11 @@
     (try
       (is (thrown-with-msg? AssertionError
                             #"Gender"
-                            (p/str->person invalid-gender))))))
+                            (p/str->person invalid-gender)))))
 
-(run-tests)
+  (def invalid-date-of-birth "Chernyak|Artem|M|Green|05-03-1990")
+  (testing "invalid date of birth"
+    (try
+      (is (thrown-with-msg? AssertionError
+                            #"MM/dd/yyyy"
+                            (p/str->person invalid-date-of-birth))))))
