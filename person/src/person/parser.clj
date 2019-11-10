@@ -61,14 +61,18 @@
 ;; Parser
 (defrecord Person [last-name first-name gender favorite-color date-of-birth])
 
+(def psv-regex #"\ *\|\ *")
+(def csv-regex #"\ *\,\ *")
+(def ssv-regex #"\ ")
+
 (defn- split-str
   "Splits a string by '|', ',', or ' '."
   [s]
   {:post [(validate-split-str %)]}
   (cond
-    (str/includes? s "|") (str/split s #"\|")
-    (str/includes? s ",") (str/split s #"\,")
-    (str/includes? s " ") (str/split s #"\ ")
+    (str/includes? s "|") (str/split s psv-regex)
+    (str/includes? s ",") (str/split s csv-regex)
+    (str/includes? s " ") (str/split s ssv-regex)
     :else []))
 
 (defn make-person

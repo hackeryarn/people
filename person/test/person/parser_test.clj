@@ -22,7 +22,16 @@
   (testing "comma separated values"
     (is (= valid-person (p/str->person valid-csv))))
   (testing "space separated values"
-    (is (= valid-person (p/str->person valid-ssv)))))
+    (is (= valid-person (p/str->person valid-ssv))))
+
+  (def valid-psv-with-spaces "Chernyak |Artem | Male| Green|05/03/1990")
+  (def valid-csv-with-spaces "Chernyak ,Artem , M, Green,05/03/1990")
+
+  (testing "pipe separated values with spaces"
+    (is (= valid-person (p/str->person valid-psv-with-spaces))))
+  (testing "comma separated values with spaces"
+    (is (= valid-person (p/str->person valid-csv-with-spaces)))))
+
 
 
 (deftest invalid-str->person
@@ -44,3 +53,5 @@
       (is (thrown-with-msg? AssertionError
                             #"MM/dd/yyyy"
                             (p/str->person invalid-date-of-birth))))))
+
+(run-tests)
