@@ -9,13 +9,12 @@
   (def valid-ssv "Chernyak Artem M Green 05/03/1990")
 
   (def valid-person
-    (p/map->Person {:first-name "Artem"
-                    :last-name "Chernyak"
-                    :gender "m"
-                    :favorite-color "Green"
-                    :date-of-birth (time/local-date
-                                    "MM/dd/yyyy"
-                                    "05/03/1990")}))
+    (p/make-person
+     "Chernyak"
+     "Artem"
+     "m"
+     "Green"
+     "05/03/1990"))
 
   (testing "pipe separated values"
     (is (= valid-person (p/str->person valid-psv))))
