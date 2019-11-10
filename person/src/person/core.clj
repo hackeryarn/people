@@ -14,12 +14,12 @@
   "List of valid genders"
   (map name (keys gender-map)))
 
-(defn gender?
+(defn- gender?
   "Checks if string is a valid gender"
   [s]
   (some #{(str/lower-case s)} valid-genders))
 
-(defn date-str?
+(defn- date-str?
   "Checks for valid date string"
   [date]
   (boolean (re-matches #"\d\d\/\d\d\/\d\d\d\d" date)))
@@ -61,7 +61,7 @@
 ;; Parser
 (defrecord Person [last-name first-name gender favorite-color date-of-birth])
 
-(defn split-str
+(defn- split-str
   "Splits a string by '|', ',', or ' '."
   [s]
   {:post [(validate-split-str %)]}
