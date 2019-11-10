@@ -25,9 +25,15 @@
     (is (= valid-person (p/str->person valid-ssv))))
 
   (def no-separator "ChernyakArtem")
-
   (testing "missing separators"
     (try
-      (is (thrown? AssertionError (p/str->person no-separator))))))
+      (is (thrown? AssertionError (p/str->person no-separator)))))
+
+  (def invalid-gender "Chernyak|Artem|Alien|Green|05/03/1990")
+  (testing "invalid gender"
+    (try
+      (is (thrown-with-msg? AssertionError
+                            #"Gender"
+                            (p/str->person invalid-gender))))))
 
 (run-tests)
