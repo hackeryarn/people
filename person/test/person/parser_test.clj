@@ -1,14 +1,10 @@
 (ns person.parser-test
   (:require [clojure.test :refer :all]
-            [java-time :as time]
-            [person.parser :as p]))
+            [person.core :as p]
+            [person.parser :as pp]))
 
-(deftest valid-str->person
-  (def valid-psv "Chernyak|Artem|Male|Green|05/03/1990")
-  (def valid-csv "Chernyak,Artem,M,Green,05/03/1990")
-  (def valid-ssv "Chernyak Artem M Green 05/03/1990")
-
-  (def valid-person
+(deftest str->person
+  (def person
     (p/make-person
      "Chernyak"
      "Artem"
@@ -16,41 +12,24 @@
      "Green"
      "05/03/1990"))
 
+  (def psv "Chernyak|Artem|Male|Green|05/03/1990")
+  (def csv "Chernyak,Artem,M,Green,05/03/1990")
+  (def ssv "Chernyak Artem M Green 05/03/1990")
   (testing "pipe separated values"
-    (is (= valid-person (p/str->person valid-psv))))
+    (is (= person (pp/str->person psv))))
   (testing "comma separated values"
-    (is (= valid-person (p/str->person valid-csv))))
+    (is (= person (pp/str->person csv))))
   (testing "space separated values"
-    (is (= valid-person (p/str->person valid-ssv))))
+    (is (= person (pp/str->person ssv))))
 
-  (def valid-psv-with-spaces "Chernyak |Artem | Male| Green|05/03/1990")
-  (def valid-csv-with-spaces "Chernyak ,Artem , M, Green,05/03/1990")
-
+  (def psv-with-spaces "Chernyak |Artem | Male| Green|05/03/1990")
+  (def csv-with-spaces "Chernyak ,Artem , M, Green,05/03/1990")
   (testing "pipe separated values with spaces"
-    (is (= valid-person (p/str->person valid-psv-with-spaces))))
+    (is (= person (pp/str->person psv-with-spaces))))
   (testing "comma separated values with spaces"
-    (is (= valid-person (p/str->person valid-csv-with-spaces)))))
+    (is (= person (pp/str->person csv-with-spaces))))
 
-
-
-(deftest invalid-str->person
   (def no-separator "ChernyakArtem")
   (testing "missing separators"
     (try
-      (is (thrown? AssertionError (p/str->person no-separator)))))
-
-  (def invalid-gender "Chernyak|Artem|Alien|Green|05/03/1990")
-  (testing "invalid gender"
-    (try
-      (is (thrown-with-msg? AssertionError
-                            #"Gender"
-                            (p/str->person invalid-gender)))))
-
-  (def invalid-date-of-birth "Chernyak|Artem|M|Green|05-03-1990")
-  (testing "invalid date of birth"
-    (try
-      (is (thrown-with-msg? AssertionError
-                            #"MM/dd/yyyy"
-                            (p/str->person invalid-date-of-birth))))))
-
-(run-tests)
+      (is (thrown? AssertionError (pp/str->person no-separator))))))

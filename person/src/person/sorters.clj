@@ -1,5 +1,5 @@
 (ns person.sorters
-  (:require [person.parser :as p]
+  (:require [person.core :as p]
             [java-time :as time]
             [clojure.string :as str]))
 
@@ -35,8 +35,9 @@
     "Green"
     "05/03/1990")])
 
+
 (defn sort-by-gender-and-last-name
-  "Sorts the list first by gender then by last name ascending."
+  "Sorts a list of Person records first by gender then by last name ascending."
   [people]
   (->> people
        (sort-by #(str/lower-case (:last-name %)))
