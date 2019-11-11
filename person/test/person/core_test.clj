@@ -85,4 +85,96 @@
                              "Green"
                              "05-03-1990"))))))
 
-(run-tests)
+(deftest by-gender-last-name
+  (def male
+    (p/make-person
+     "C"
+     "Artem"
+     "m"
+     "Green"
+     "05/03/1990"))
+  (def female
+    (p/make-person
+     "C"
+     "Artem"
+     "f"
+     "Green"
+     "05/03/1990"))
+  (testing "male vs female order"
+    (is (< 0 (p/by-gender-last-name male female))))
+
+  (def male-last-name-z
+    (p/make-person
+     "Z"
+     "Artem"
+     "m"
+     "Green"
+     "05/03/1990"))
+  (testing "ascending last name after gender check"
+    (is (> 0 (p/by-gender-last-name male male-last-name-z))))
+
+  (def male-last-name-lower-c
+    (p/make-person
+     "c"
+     "Artem"
+     "m"
+     "Green"
+     "05/03/1990"))
+  (testing "ignores case in last name"
+    (is (> 0 (p/by-gender-last-name male-last-name-lower-c male-last-name-z))))
+
+  (def female-last-name-z
+    (p/make-person
+     "z"
+     "Artem"
+     "f"
+     "Green"
+     "05/03/1990"))
+  (testing "ignores last name in favor of gender"
+    (is (< 0 (p/by-gender-last-name male female-last-name-z)))))
+
+(deftest by-birth-date
+  (def young
+    (p/make-person
+     "C"
+     "Artem"
+     "m"
+     "Green"
+     "05/03/1990"))
+  (def old
+    (p/make-person
+     "C"
+     "Artem"
+     "f"
+     "Green"
+     "05/03/1900"))
+  (testing "compares birth dates in ascending order"
+    (is (< 0 (p/by-birth-date young old)))))
+
+(deftest by-last-name
+  (def a-last-name
+    (p/make-person
+     "a"
+     "Artem"
+     "m"
+     "Green"
+     "05/03/1990"))
+  (def z-last-name
+    (p/make-person
+     "z"
+     "Artem"
+     "f"
+     "Green"
+     "05/03/1900"))
+  (testing "compares last names"
+    (is (< 0 (p/by-last-name a-last-name z-last-name))))
+
+  (def capital-z-last-name
+    (p/make-person
+     "Z"
+     "Artem"
+     "f"
+     "Green"
+     "05/03/1900"))
+  (testing "ignores last name case"
+    (is (< 0 (p/by-last-name a-last-name capital-z-last-name)))))

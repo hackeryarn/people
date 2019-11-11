@@ -52,13 +52,23 @@
               "Date of birth should have the format MM/dd/yyyy"))))
 
 ;; Person
-
 (defprotocol ComparablePerson
-  (by-gender-last-name [this other])
-  (by-birth-date [this other])
-  (by-last-name [this other]))
+  (by-gender-last-name
+    [this other])
+  (by-birth-date
+    [this other])
+  (by-last-name
+    [this other]))
 
-(defrecord Person [last-name first-name gender favorite-color date-of-birth])
+(defrecord Person [last-name first-name gender favorite-color date-of-birth]
+  ComparablePerson
+  (by-gender-last-name [this other]
+    (compare [(:gender this) (str/lower-case (:last-name this))]
+             [(:gender other) (str/lower-case (:last-name other))]))
+  (by-birth-date [this other]
+    (compare (:date-of-birth this) (:date-of-birth other)))
+  (by-last-name [this other]
+    (compare (str/lower-case (:last-name other)) (str/lower-case (:last-name this)))))
 
 (defn make-person
   "Creates a person from a split string"
