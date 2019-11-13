@@ -84,3 +84,10 @@
    ((keyword (str/lower-case gender)) gender-map)
    favorite-color
    (time/local-date "MM/dd/yyyy" date-of-birth)))
+
+(defn format-person
+  "Formats a person into a string separated by '|'"
+  [person]
+  (->> (update person :date-of-birth #(time/format "MM/dd/yyyy" %))
+       vals
+       (str/join "|")))

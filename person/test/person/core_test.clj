@@ -178,3 +178,14 @@
      "05/03/1900"))
   (testing "ignores last name case"
     (is (< 0 (p/by-last-name a-last-name capital-z-last-name)))))
+
+(deftest format-person
+  (def person
+    (p/make-person
+     "c"
+     "Artem"
+     "f"
+     "Green"
+     "05/03/1900"))
+  (testing "correctly formats a person"
+    (is (= "c|Artem|f|Green|05/03/1900" (p/format-person person)))))

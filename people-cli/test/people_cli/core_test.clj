@@ -32,4 +32,15 @@
     (is (re-find #"Produces a sorted list from the provided file of person data"
                 (:exit-message (cli/validate-args invalid-sort-option))))))
 
-(run-tests)
+(deftest process-file
+  (def expected-output "D|Artem|m|green|05/03/1991
+G|Artem|m|green|05/03/1992
+H|Artem|f|green|05/03/1993
+A|Artem|f|green|05/03/1994
+F|Artem|f|green|05/03/1995
+C|Artem|m|green|05/03/1996
+B|Artem|m|green|05/03/1997
+E|Artem|f|green|05/03/1998")
+  (testing "formats the output according to birth year"
+    (is (= expected-output
+           (doall (cli/process-file "resources/test.psv" "by-birth-date"))))))
