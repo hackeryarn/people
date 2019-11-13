@@ -3,7 +3,8 @@
   (:require [clojure.tools.cli :as cli]
             [person.parser :as pp]
             [person.core :as p]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [clojure.java.io :as io]))
 
 (def cli-options
   [["-s" "--sort SORT" "Sort by type"
@@ -41,7 +42,9 @@
 (def valid-sort-options
   (set (map name (keys sort-options-map))))
 
-(defn validate-args [args]
+(defn validate-args
+  "Validates cli options and arguments."
+  [args]
   (let [{:keys [options arguments errors summary]} (cli/parse-opts args cli-options)]
     (cond
       (:help options)
@@ -58,9 +61,21 @@
   (println msg)
   (System/exit status))
 
+(defn process-file
+  "Processes the supplied file and provides the output in the specified format"
+  [file sort-option]
+  (with-open [r (io/reader file)]
+    (doall (->> (line-seq r)
+                (map (->> pp/str->person))
+                (sort p/by-last-name)
+                (map println)))))
+
+
 (defn -main [& args]
   (let [{:keys [file options exit-message ok?]} (validate-args args)
         sort (:sort options)]
     (if exit-message
       (exit (if ok? 0 1) exit-message)
-      (println "Hello, World!"))))
+      (process-file file sort))))
+
+(process-file "resources/test.psv" "by-last-name")
