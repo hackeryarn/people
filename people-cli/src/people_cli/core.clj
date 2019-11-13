@@ -3,6 +3,7 @@
   (:require [clojure.tools.cli :as cli]
             [person.parser :as pp]
             [person.core :as p]
+            [java-time :as time]
             [clojure.string :as str]
             [clojure.java.io :as io]))
 
@@ -61,21 +62,25 @@
   (println msg)
   (System/exit status))
 
+(defn format-person
+  [person]
+  (->> (update person :date-of-birth #(time/format "MM/dd/yyyy" %))
+       vals
+       (str/join "|")))
+
 (defn process-file
   "Processes the supplied file and provides the output in the specified format"
   [file sort-option]
   (with-open [r (io/reader file)]
-    (doall (->> (line-seq r)
-                (map (->> pp/str->person))
-                (sort p/by-last-name)
-                (map println)))))
-
+     (->> (line-seq r)
+          (map pp/str->person)
+          (sort ((keyword sort-option) sort-options-map))
+          (map format-person)
+          (str/join "\n"))))
 
 (defn -main [& args]
   (let [{:keys [file options exit-message ok?]} (validate-args args)
         sort (:sort options)]
     (if exit-message
       (exit (if ok? 0 1) exit-message)
-      (process-file file sort))))
-
-(process-file "resources/test.psv" "by-last-name")
+      (print (process-file file sort)))))
