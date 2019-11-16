@@ -61,12 +61,18 @@
   (println msg)
   (System/exit status))
 
+(defn parse-person-line [i s]
+  (try
+    (pp/str->person s)
+    (catch AssertionError e
+      (exit 1 (str "Parsing error on line " (inc i) ": " (.getMessage e))))))
+
 (defn process-file
   "Processes the supplied file and provides the output in the specified format"
   [file sort-option]
   (with-open [r (io/reader file)]
      (->> (line-seq r)
-          (map pp/str->person)
+          (map-indexed parse-person-line)
           (sort ((keyword sort-option) sort-options-map))
           (map p/format-person)
           (str/join "\n"))))

@@ -43,4 +43,11 @@ B|Artem|m|green|05/03/1997
 E|Artem|f|green|05/03/1998")
   (testing "formats the output according to birth year"
     (is (= expected-output
-           (doall (cli/process-file "resources/test.psv" "by-birth-date"))))))
+           (doall (cli/process-file "resources/test.psv" "by-birth-date")))))
+  
+  (testing "gracefully exits on parsing error"
+    (with-redefs [cli/exit (fn [status msg] {:status status :msg msg})]
+      (let [result (cli/parse-person-line 4 "E|Artem|f|green|05-03-1998")]
+        (is (= 1 (:status result)))
+        (is (="Parsing error on line 5: Date of birth should have the format MM/dd/yyyy"
+               (:msg result)))))))
