@@ -7,10 +7,19 @@
     [reitit.ring.middleware.muuntaja :as muuntaja]
     [reitit.ring.middleware.multipart :as multipart]
     [reitit.ring.middleware.parameters :as parameters]
+    [people-api.db :as db]
     [people-api.middleware.formats :as formats]
     [people-api.middleware.exception :as exception]
     [ring.util.http-response :refer :all]
     [clojure.java.io :as io]))
+
+(defn add-person-handler [{{{:keys [person]} :body} :parameters}]
+  (try
+    (db/add-person person)
+    {:status 201}
+    (catch AssertionError e
+      {:status 400
+       :body {:error (.getMessage e)}})))
 
 (defn service-routes []
   ["/api"
@@ -50,7 +59,15 @@
    ["/ping"
     {:get (constantly (ok {:message "pong"}))}]
    
+   ["/records"
+    {:swagger {:tags ["people"]}
+     :post {:summary "adds a single person data-line separated by '|', ',', or ' '"
+            :parameters {:body {:person string?}}
+            :response {201 {}
+                       400 {:body {:error string?}}}
+            :handler add-person-handler}}]
 
+   
    ["/math"
     {:swagger {:tags ["math"]}}
 
