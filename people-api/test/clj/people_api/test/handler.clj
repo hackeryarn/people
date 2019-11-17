@@ -64,5 +64,3 @@
                                 (header "accept" "application/transit+json")))]
         (is (= 200 (:status response)))
         (is (= "artem" (-> (m/decode-response-body response) :people first :first-name)))))))
-
-(run-tests)
