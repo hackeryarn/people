@@ -26,6 +26,14 @@
   {:status 200
    :body {:people (sort p/by-gender-last-name (db/list-people))}})
 
+(defn by-birthdate-handler [_]
+  {:status 200
+   :body {:people (sort p/by-birth-date (db/list-people))}})
+
+(defn by-name-handler [_]
+  {:status 200
+   :body {:people (sort p/by-last-name (db/list-people))}})
+
 (defn service-routes []
   ["/api"
    {:coercion spec-coercion/coercion
@@ -73,46 +81,16 @@
              :responses {201 {}
                          400 {:body {:error string?}}}
              :handler add-person-handler}}]
+    
     ["/records/gender"
      {:get {:summary "returns people sorted by gender then last name"
             :responses {200 {:body {:people seq?}}}
-            :handler by-gender-handler}}]]
-   
-   ["/math"
-    {:swagger {:tags ["math"]}}
-
-    ["/plus"
-     {:get {:summary "plus with spec query parameters"
-            :parameters {:query {:x int?, :y int?}}
-            :responses {200 {:body {:total pos-int?}}}
-            :handler (fn [{{{:keys [x y]} :query} :parameters}]
-                       {:status 200
-                        :body {:total (+ x y)}})}
-      :post {:summary "plus with spec body parameters"
-             :parameters {:body {:x int?, :y int?}}
-             :responses {200 {:body {:total pos-int?}}}
-             :handler (fn [{{{:keys [x y]} :body} :parameters}]
-                        {:status 200
-                         :body {:total (+ x y)}})}}]]
-
-   ["/files"
-    {:swagger {:tags ["files"]}}
-
-    ["/upload"
-     {:post {:summary "upload a file"
-             :parameters {:multipart {:file multipart/temp-file-part}}
-             :responses {200 {:body {:name string?, :size int?}}}
-             :handler (fn [{{{:keys [file]} :multipart} :parameters}]
-                        {:status 200
-                         :body {:name (:filename file)
-                                :size (:size file)}})}}]
-
-    ["/download"
-     {:get {:summary "downloads a file"
-            :swagger {:produces ["image/png"]}
-            :handler (fn [_]
-                       {:status 200
-                        :headers {"Content-Type" "image/png"}
-                        :body (-> "public/img/warning_clojure.png"
-                                  (io/resource)
-                                  (io/input-stream))})}}]]])
+            :handler by-gender-handler}}]
+    ["/records/birthdate"
+     {:get {:summary "returns people sorted by date of birth"
+            :responses {200 {:body {:people seq?}}}
+            :handler by-birthdate-handler}}]
+    ["/records/name"
+     {:get {:summary "returns people sorted by last name"
+            :responses {200 {:body {:people seq?}}}
+            :handler by-name-handler}}]]])
