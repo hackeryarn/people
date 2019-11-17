@@ -1,21 +1,19 @@
 # people-api
 
-generated using Luminus version "3.50"
-
-FIXME
-
-## Prerequisites
-
-You will need [Leiningen][1] 2.0 or above installed.
-
-[1]: https://github.com/technomancy/leiningen
+Provides an api interface and storage mechanism for people data.
 
 ## Running
 
 To start a web server for the application, run:
 
-    lein run 
+```bash
+$ lein run
+```
+
+## Swagger
+
+Swagger documentation and usage interface is available at http://localhost:3000/api/api-docs/index.html
 
 ## License
 
-Copyright © 2019 FIXME
+Copyright © 2019 Artem Chernyak

@@ -1,43 +1,23 @@
 # people-cli
 
-FIXME: description
-
-## Local Setup
-
-In order to work with the sibling person project, setup a checkouts folder as
-specified in the [Leiningen guide](https://github.com/technomancy/leiningen/blob/stable/doc/TUTORIAL.md). 
-
-```bash
-$ mkdir checkouts
-$ cd checkouts
-$ ln -s ../../person person
-```
+Provides a cli based interface for reading and sorting files
+containing people data.
 
 ## Usage
 
-FIXME: explanation
+``` bash
+$ lein run [options] file-name
+```
 
-    $ java -jar people-cli-0.1.0-standalone.jar [args]
+For full list of options and documentation, run:
 
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
+``` bash
+$ lein run -- -h
+```
 
 ## License
 
-Copyright © 2019 FIXME
+Copyright © 2019 Artem Chernyak
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at

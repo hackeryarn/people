@@ -1,14 +1,19 @@
 # person
 
-A Clojure library designed to ... well, that part is up to you.
+A Clojure library that provides general functionality for parsing and
+sorting people data.
 
 ## Usage
 
-FIXME
+`person.core` defines a person structure and provides comparison
+functions for working with person data.
+
+`person.parser` provides a function `str->person` for parsing a string
+that represents person fields separated by `|`, `,`, or ` `.
 
 ## License
 
-Copyright © 2019 FIXME
+Copyright © 2019 Artem Chernyak
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
