@@ -10,6 +10,7 @@
     [people-api.db :as db]
     [people-api.middleware.formats :as formats]
     [people-api.middleware.exception :as exception]
+    [person.core :as p]
     [ring.util.http-response :refer :all]
     [clojure.java.io :as io]))
 
@@ -20,6 +21,10 @@
     (catch AssertionError e
       {:status 400
        :body {:error (.getMessage e)}})))
+
+(defn by-gender-handler [_]
+  {:status 200
+   :body {:people (sort p/by-gender-last-name (db/list-people))}})
 
 (defn service-routes []
   ["/api"
@@ -60,13 +65,18 @@
     {:get (constantly (ok {:message "pong"}))}]
    
    ["/records"
-    {:swagger {:tags ["people"]}
-     :post {:summary "adds a single person data-line separated by '|', ',', or ' '"
-            :parameters {:body {:person string?}}
-            :response {201 {}
-                       400 {:body {:error string?}}}
-            :handler add-person-handler}}]
+    {:swagger {:tags ["people"]}}
 
+    [""
+     {:post {:summary "adds a single person data-line separated by '|', ',', or ' '"
+             :parameters {:body {:person string?}}
+             :responses {201 {}
+                         400 {:body {:error string?}}}
+             :handler add-person-handler}}]
+    ["/records/gender"
+     {:get {:summary "returns people sorted by gender then last name"
+            :responses {200 {:body {:people seq?}}}
+            :handler by-gender-handler}}]]
    
    ["/math"
     {:swagger {:tags ["math"]}}
