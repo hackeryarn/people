@@ -1,7 +1,9 @@
 (ns people-api.db
-  (:require [person.parser :as pp]))
+  (:require [person.parser :as pp]
+            [mount.core :as mount]))
 
-(def db (atom []))
+(mount/defstate db
+  :start (atom []))
 
 (defn add-person [person-str]
   (swap! db conj (pp/str->person person-str)))

@@ -82,15 +82,15 @@
                          400 {:body {:error string?}}}
              :handler add-person-handler}}]
     
-    ["/records/gender"
+    ["/gender"
      {:get {:summary "returns people sorted by gender then last name"
             :responses {200 {:body {:people seq?}}}
             :handler by-gender-handler}}]
-    ["/records/birthdate"
+    ["/birthdate"
      {:get {:summary "returns people sorted by date of birth"
             :responses {200 {:body {:people seq?}}}
             :handler by-birthdate-handler}}]
-    ["/records/name"
+    ["/name"
      {:get {:summary "returns people sorted by last name"
             :responses {200 {:body {:people seq?}}}
             :handler by-name-handler}}]]])

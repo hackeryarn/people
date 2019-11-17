@@ -38,7 +38,7 @@
   :main ^:skip-aot people-api.core
 
   :plugins [[lein-cloverage "1.1.2"]]
-
+  :cloverage {:ns-exclude-regex [#"people-api\.nrepl" #"people-api\.core" #"user"]}  
   :profiles
   {:uberjar {:omit-source true
              :aot :all
