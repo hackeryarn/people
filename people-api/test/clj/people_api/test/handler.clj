@@ -38,7 +38,7 @@
       (let [response ((app) (-> (request :post "/api/records")
                                 (content-type "application/json")
                                 (json-body {})))]
-        (is (= 201 (:status response)))))
+        (is (= 400 (:status response)))))
 
     (testing "invalid add person"
       (let [response ((app) (-> (request :post "/api/records")
